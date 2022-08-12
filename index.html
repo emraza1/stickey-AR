@@ -1,77 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <title>AR.js Studio</title>
-    <link rel="shortcut icon" href="./assets/img/favicon.ico" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- import the webpage's stylesheet -->
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="./pages/main/main.css" />
+    <link rel="stylesheet" href="../../style.css" />
 
-    <!-- import the webpage's javascript file -->
-    <script src="./components/header/header.js"></script>
-    <script src="./pages/main/main.js"></script>
-    <script src="./components/feedback/stickybutton.js"></script>
-  </head>
+    <!-- import the leaflet css and script -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" crossorigin=""
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" crossorigin=""
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="></script>
 
-  <body>
-    <page-header assetsUrl="assets"></page-header>
-    <div class="background">
-      <div class="content">
-        <p class="title">Web-enabled AR experiences</p>
-        <p class="paragraph">
-            AR.js Studio is an open-source AR creation platform for building custom augmented reality experiences.
-            You can create location-based or marker-based AR applications and deploy them straight to the web.
-            That means you won’t have to download any extra apps to access your experience!
-            Working with AR.js Studio doesn’t require any knowledge of coding, either.
-            You can start creating your first AR project right now.
-        </p>
 
-        <img class="splashscreen" src="./assets/img/splashscreen.png" alt="Demo image home page"/>
+    <!-- import studio-backend api -->
+    <script src="https://raw.githack.com/AR-js-org/studio-backend/master/dist/arjs-studio-backend.min.js"></script>
 
-        <p class="lead">Pick your project type</p>
+    <!-- import aframe to support model preview -->
+    <script src="https://aframe.io/releases/1.0.4/aframe.js"></script>
+    <script src="https://cdn.statically.io/gh/donmccurdy/aframe-extras/fe293f78/dist/aframe-extras.loaders.js"></script>
 
-        <div>
-          <label class="radio-container paragraph">
-            <span class="radio-title">Location-based</span>
-            <input
-              id="location"
-              type="radio"
-              name="radio"
-              onclick="radioOnclick(this)"
-            />
-            <span>
-                Place your creation on a map, so it remains tied to a physical location.
-            </span>
-            <span class="checkmark"></span>
-          </label>
+    <!-- import JsZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.3.0/jszip.min.js"></script>
 
-          <label class="radio-container paragraph">
-            <span class="radio-title">Marker-based</span>
-            <input
-              id="marker"
-              type="radio"
-              name="radio"
-              onclick="radioOnclick(this)"
-            />
-            <span>
-                Connect your creation to a visual marker, which can be moved to any location.
-            </span>
-            <span class="checkmark"></span>
-          </label>
+    <!-- import web components -->
+    <script src="../../components/back-anchor/back-anchor.js"></script>
+    <script src="../../components/file-holder/file-holder.js"></script>
+    <script src="../../components/file-select/file-select.js"></script>
+    <script src="../../components/map/map-elements.js"></script>
+    <script src="../../components/map/map-pick-location.js"></script>
+    <script src="../../components/header/header.js"></script>
+    <script src="../../components/footer/footer.js"></script>
+    <script src="../../components/model-controller/model-controller.js"></script>
+    <script src="../../components/feedback/stickybutton.js"></script>
 
-          <div class="buttons-container">
-            <a onclick="anchorOnclick(this)" id="start-building" class="primary-button">Start building</a>
-          </div>
-          <feedback-button></feedback-button>
-          <div id="error" class="error" style="visibility: hidden;">
-            Please, select a project type.
-          </div>
+    <!-- import utils -->
+    <script src="../../utils/fileHelper.js"></script>
+    <script src="../../utils/fileTemplate.js"></script>
+    <script src="../../utils/fileHandler.js"></script>
+    <script src="./location.js" defer></script>
+</head>
+
+<body>
+    <page-header assetsUrl="../../assets"></page-header>
+
+    <div class="pages-content">
+        <back-anchor assetsUrl="../../assets"></back-anchor>
+        <div class="pages-content-container">
+            <div class="pages-content-element">
+                <p class="title">Stickey Location AR</p>
+                <p class="paragraph">
+                    A location-based AR experience uses GPS coordinates to place your AR content in a specific location.
+                </p>
+            </div>
         </div>
-      </div>
+
+        <div class="pages-content-container">
+            <div class="pages-content-element">
+                <p class="lead">1. Pick the location</p>
+                <p class="paragraph">
+                    Click to drop a pin on the map or enter exact GPS coordinates. 
+                </p>
+                <div class="coordinates-input-wrapper">
+                    <div class="coordinates-input-container">
+                        <!-- <div>
+                            <label for="latitude">Latitude:</label>
+                            <input class="text-input" type="text" id="latitude" onblur="check_lat_lon()" name="latitude" />
+                        </div>
+                        <div>
+                            <label for="longitude">Longitude:</label>
+                            <input class="text-input" type="text" id="longitude" onblur="check_lat_lon()" name="longitude" />
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="pages-content-container">
+            <map-pick-location></map-pick-location>
+        </div>
+
+        <div class="pages-content-container">
+            <div class="pages-content-element">
+                <p class="lead">2. Choose the content </p>
+                <p class="paragraph">
+                <p>Select the type of content you would like to link to your marker and then upload the file from your
+                    computer.</p>
+                <p class="bold">
+                    Please check the file name and remove whitepaces.
+                </p>
+                <ul>
+                    <li>3D Object (.gltf, .glb .zip; max size 50MB)</li>
+                    <li>Image (.jpg, .png, .gif; max size 15MB)</li>
+                    <!-- Audio need to be fixed -->
+                    <!-- <li>Audio (.mp3; max size 10MB)</li> -->
+                    <li>Video (.mp4; max size 25MB)</li>
+                </ul>
+                </p>
+                <label class="passive-button file-input">
+                    <input id="content-file" accept="*" type="file" hidden onchange="handleContentUpload(this)" />
+                    Upload file
+                </label>
+                <p id="content-error" class="error"></p>
+            </div>
+            <div id="content-preview" target="content-file">
+            </div>
+        </div>
     </div>
-  </body>
+    <page-footer></page-footer>
+    
+</body>
+
 </html>
