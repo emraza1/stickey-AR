@@ -38,6 +38,19 @@ const enablePageFooter = (enable) => {
     }
 }
 
+function base64ToBuffer(str){
+    str = window.atob(str); // creates a ASCII string
+    var buffer = new ArrayBuffer(str.length),
+        view = new Uint8Array(buffer);
+    for(var i = 0; i < str.length; i++){
+        view[i] = str.charCodeAt(i);
+    }
+    return buffer;
+}
+
+
+
+
 const zip = () => {
     // TODO: replace alerts with HTML error messages.
     if (!window.assetParam.locations.length) return alert('please select a location');
@@ -53,13 +66,17 @@ const zip = () => {
         assetName: window.assetName,
         assetParam: window.assetParam
     });
+    // console.log(package);
 
     package.serve({ packageType: 'zip' }).then((base64) => {
         const link = document.createElement('a');
+        console.log(base64)
         link.href = `data:application/zip;base64,${base64}`;
+        console.log(link.href)
         link.download = 'ar.zip';
         link.click();
     });
+
 
 };
 
@@ -83,7 +100,7 @@ const publish = () => {
         assetParam: window.assetParam,
     });
 
-    window.location = '../publish';
+    window.location = 'pages/publish';
 
 }
 
