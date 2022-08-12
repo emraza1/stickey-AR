@@ -121,5 +121,5 @@ const publish = () => {
 
 }
 
-zipButton.addEventListener('click', zip);
+// zipButton.addEventListener('click', zip);
 githubButton.addEventListener('click', publish);
