@@ -1,5 +1,5 @@
 const { Package } = ARjsStudioBackend;
-
+// const { Octokit } = require('@octokit/rest');
 var githubButton = document.querySelector('page-footer').shadowRoot.querySelector('#github-publish');
 var zipButton = document.querySelector('page-footer').shadowRoot.querySelector('#zip-publish');
 
@@ -68,17 +68,34 @@ const zip = () => {
     });
     // console.log(package);
 
-    package.serve({ packageType: 'zip' }).then((base64) => {
-        const link = document.createElement('a');
-        console.log(base64)
-        link.href = `data:application/zip;base64,${base64}`;
-        console.log(link.href)
-        link.download = 'ar.zip';
-        link.click();
-    });
+    // package.serve({ packageType: 'zip' }).then((base64) => {
+    //     JSZip.loadAsync(file).then(function (zip) {
+    //         Object.keys(zip.files).forEach(function (filename) {
+    //           zip.files[filename].async('string').then(function (fileData) {
+    //             const octokit = new Octokit({
+    //                 auth: 'personal-access-token123'
+    //               })
+                  
+    //               await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
+    //                 owner: 'OWNER',
+    //                 repo: 'REPO',
+    //                 path: 'PATH',
+    //                 message: 'my commit message',
+    //                 committer: {
+    //                   name: 'Monalisa Octocat',
+    //                   email: 'octocat@github.com'
+    //                 },
+    //                 content: 'bXkgbmV3IGZpbGUgY29udGVudHM='
+    //               })
+    
+    //           })
+    //         })
+    //       })
+    // });  
 
-
+    // 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
 };
+
 
 /**
  * Stores the session data and redirects to publish page.
